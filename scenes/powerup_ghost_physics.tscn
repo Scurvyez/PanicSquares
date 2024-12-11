@@ -1,0 +1,24 @@
+[gd_scene load_steps=6 format=3 uid="uid://cnphjmrvtquv8"]
+
+[ext_resource type="Script" path="res://scripts/powerup_ghost_physics.gd" id="1_b46s6"]
+[ext_resource type="Shader" path="res://shaders/powerupghostphysicsColor.gdshader" id="2_rlvhm"]
+[ext_resource type="Texture2D" uid="uid://wm5eombt02fn" path="res://textures/square.png" id="2_wbk7f"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dyi4q"]
+shader = ExtResource("2_rlvhm")
+shader_parameter/color_base = Vector4(1, 1, 1, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o0maa"]
+size = Vector2(32, 32)
+
+[node name="powerup_ghost_physics" type="Area2D"]
+collision_mask = 2
+script = ExtResource("1_b46s6")
+
+[node name="sprite_base" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_dyi4q")
+scale = Vector2(2, 2)
+texture = ExtResource("2_wbk7f")
+
+[node name="collision_shape_base" type="CollisionShape2D" parent="." groups=["powerups"]]
+shape = SubResource("RectangleShape2D_o0maa")

@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://crdl5po1bcw2w"]
+
+[ext_resource type="PackedScene" uid="uid://dndaona4rq65t" path="res://scenes/player.tscn" id="1_2mk6v"]
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_pa8lx"]
+[ext_resource type="Script" path="res://scripts/game_manager.gd" id="2_45urb"]
+[ext_resource type="Script" path="res://scripts/grid_manager.gd" id="4_ak53a"]
+[ext_resource type="FontFile" uid="uid://dj5jtot7g6kuv" path="res://fonts/PixelOperatorSC.ttf" id="4_qo0as"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_pa8lx")
+
+[node name="game_manager" type="Node" parent="."]
+script = ExtResource("2_45urb")
+
+[node name="score_label" type="Label" parent="game_manager"]
+offset_right = 1152.0
+offset_bottom = 35.0
+theme_override_fonts/font = ExtResource("4_qo0as")
+theme_override_font_sizes/font_size = 32
+autowrap_mode = 2
+
+[node name="timer_label" type="Label" parent="game_manager"]
+offset_top = 35.0
+offset_right = 1152.0
+offset_bottom = 70.0
+theme_override_fonts/font = ExtResource("4_qo0as")
+theme_override_font_sizes/font_size = 32
+autowrap_mode = 2
+
+[node name="grid_manager" type="Node" parent="."]
+script = ExtResource("4_ak53a")
+
+[node name="player" parent="." instance=ExtResource("1_2mk6v")]
+
+[connection signal="ready" from="." to="game_manager" method="_on_game_ready"]
+[connection signal="ready" from="game_manager" to="game_manager" method="_on_ready"]

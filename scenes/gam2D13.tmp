@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://crdl5po1bcw2w"]
+
+[ext_resource type="PackedScene" uid="uid://dndaona4rq65t" path="res://scenes/player.tscn" id="1_2mk6v"]
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_pa8lx"]
+[ext_resource type="Script" path="res://scripts/candy_spawner.gd" id="3_8hulk"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_pa8lx")
+
+[node name="player" parent="." instance=ExtResource("1_2mk6v")]
+position = Vector2(382, 415)
+
+[node name="candy_spawner" type="Node2D" parent="."]
+script = ExtResource("3_8hulk")
+
+[connection signal="ready" from="candy_spawner" to="." method="_on_candy_spawner_ready"]
+[connection signal="ready" from="candy_spawner" to="candy_spawner" method="_on_ready"]

@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://cmoguh0d5yodd"]
+
+[ext_resource type="Script" path="res://scripts/collectible.gd" id="1_ja8cl"]
+[ext_resource type="Shader" path="res://shaders/collectible.gdshader" id="2_eq5ff"]
+[ext_resource type="Texture2D" uid="uid://wm5eombt02fn" path="res://textures/square.png" id="2_xsuw3"]
+[ext_resource type="AudioStream" uid="uid://b7lldkdw3gw0m" path="res://sounds/pop-39222.mp3" id="3_7n1cf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s6r6v"]
+shader = ExtResource("2_eq5ff")
+shader_parameter/timeP = null
+shader_parameter/lifeT = null
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sys0w"]
+size = Vector2(32, 32)
+
+[node name="collectible" type="Area2D"]
+collision_mask = 2
+script = ExtResource("1_ja8cl")
+
+[node name="sprite_base" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_s6r6v")
+scale = Vector2(2, 2)
+texture = ExtResource("2_xsuw3")
+
+[node name="sprite_time_booster" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_xsuw3")
+offset = Vector2(-50, 0)
+
+[node name="collision_shape_base" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_sys0w")
+
+[node name="collect_sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_7n1cf")
+bus = &"SFX"
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="draw" from="." to="." method="_on_draw"]

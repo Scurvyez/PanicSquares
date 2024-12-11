@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://crdl5po1bcw2w"]
+
+[ext_resource type="PackedScene" uid="uid://dndaona4rq65t" path="res://scenes/player.tscn" id="1_2mk6v"]
+[ext_resource type="PackedScene" uid="uid://cag40memac83a" path="res://scenes/vertical_wall.tscn" id="2_3yhjg"]
+[ext_resource type="PackedScene" uid="uid://brk1ubyk28mm3" path="res://scenes/horizontal_wall.tscn" id="3_mh8aj"]
+
+[node name="Game" type="Node2D"]
+
+[node name="player" parent="." instance=ExtResource("1_2mk6v")]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(4, 4)
+
+[node name="vertical_wall" parent="." instance=ExtResource("2_3yhjg")]
+visible = false
+position = Vector2(-154, -100)
+
+[node name="vertical_wall2" parent="." instance=ExtResource("2_3yhjg")]
+visible = false
+position = Vector2(154, -100)
+
+[node name="horizontal_wall" parent="." instance=ExtResource("3_mh8aj")]
+visible = false
+position = Vector2(-250, -91)
+
+[node name="horizontal_wall2" parent="." instance=ExtResource("3_mh8aj")]
+visible = false
+position = Vector2(-250, 91)

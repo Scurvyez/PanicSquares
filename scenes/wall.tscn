@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://crx4lvxdri5vh"]
+
+[ext_resource type="Script" path="res://scripts/wall.gd" id="1_30b8w"]
+[ext_resource type="Texture2D" uid="uid://ciw1c65k27okl" path="res://textures/squareHollow.png" id="2_w40pi"]
+[ext_resource type="FontFile" uid="uid://dj5jtot7g6kuv" path="res://fonts/PixelOperatorSC.ttf" id="3_4pt85"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ip2s"]
+size = Vector2(16, 16)
+
+[node name="wall" type="StaticBody2D" groups=["walls"]]
+scale = Vector2(2, 2)
+script = ExtResource("1_30b8w")
+
+[node name="sprite_base" type="Sprite2D" parent="."]
+texture = ExtResource("2_w40pi")
+
+[node name="collision_shape_base" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1ip2s")
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[node name="DEBUG_time_left_label" type="Label" parent="."]
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+theme_override_fonts/font = ExtResource("3_4pt85")
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2

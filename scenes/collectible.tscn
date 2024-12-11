@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://cmoguh0d5yodd"]
+
+[ext_resource type="Script" path="res://scripts/collectible.gd" id="1_ja8cl"]
+[ext_resource type="Shader" path="res://shaders/collectibleColor.gdshader" id="2_feleg"]
+[ext_resource type="Texture2D" uid="uid://wm5eombt02fn" path="res://textures/square.png" id="2_xsuw3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jr0dq"]
+shader = ExtResource("2_feleg")
+shader_parameter/color_base = Vector4(1, 1, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u114w"]
+shader = ExtResource("2_feleg")
+shader_parameter/color_base = Vector4(1, 1, 1, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sys0w"]
+size = Vector2(32, 32)
+
+[node name="collectible" type="Area2D"]
+collision_mask = 2
+script = ExtResource("1_ja8cl")
+
+[node name="sprite_base" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_jr0dq")
+scale = Vector2(2, 2)
+texture = ExtResource("2_xsuw3")
+
+[node name="sprite_time_booster" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_u114w")
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_xsuw3")
+offset = Vector2(-50, 0)
+
+[node name="collision_shape_base" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_sys0w")
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="draw" from="." to="." method="_on_draw"]

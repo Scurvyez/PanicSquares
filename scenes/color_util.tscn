@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bc12c5c7smtq"]
+
+[ext_resource type="Script" path="res://scripts/color_util.gd" id="1_tka5h"]
+
+[node name="ColorUtil" type="Node"]
+script = ExtResource("1_tka5h")

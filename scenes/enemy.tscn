@@ -1,0 +1,65 @@
+[gd_scene load_steps=10 format=3 uid="uid://tnuwsn6876jp"]
+
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_2d7xn"]
+[ext_resource type="Texture2D" uid="uid://wm5eombt02fn" path="res://textures/square.png" id="1_boict"]
+[ext_resource type="Shader" path="res://shaders/enemyColor.gdshader" id="2_chakm"]
+[ext_resource type="Texture2D" uid="uid://bconew4aw0ydy" path="res://textures/circleGradient1.png" id="3_n20yd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8tasf"]
+shader = ExtResource("2_chakm")
+shader_parameter/color_base = Vector4(1, 1, 1, 1)
+shader_parameter/color_oscil = Vector4(1, 1, 1, 1)
+shader_parameter/oscil_speed = 0.5
+shader_parameter/amplify = 1.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e2jxi"]
+shader = ExtResource("2_chakm")
+shader_parameter/color_base = Vector4(1, 1, 1, 1)
+shader_parameter/color_oscil = Vector4(1, 1, 1, 1)
+shader_parameter/oscil_speed = 0.5
+shader_parameter/amplify = 1.5
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u7j3o"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kqqhv"]
+size = Vector2(32, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vrkni"]
+
+[node name="enemy" type="CharacterBody2D" groups=["enemies"]]
+collision_layer = 2
+script = ExtResource("1_2d7xn")
+
+[node name="sprite_base" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_8tasf")
+scale = Vector2(2, 2)
+texture = ExtResource("1_boict")
+
+[node name="sprite_tail" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_e2jxi")
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_boict")
+offset = Vector2(-50, 0)
+
+[node name="collision_shape_base" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_u7j3o")
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[node name="area" type="Area2D" parent="."]
+collision_mask = 2
+
+[node name="collision_shape_base" type="CollisionShape2D" parent="area"]
+shape = SubResource("RectangleShape2D_kqqhv")
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[node name="shape_cast" type="ShapeCast2D" parent="."]
+shape = SubResource("CircleShape2D_vrkni")
+target_position = Vector2(0, 0)
+max_results = 16
+collision_mask = 3
+
+[node name="shape_cast_sprite" type="Sprite2D" parent="shape_cast"]
+visible = false
+modulate = Color(1, 0, 0.254902, 0.392157)
+texture = ExtResource("3_n20yd")

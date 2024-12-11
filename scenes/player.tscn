@@ -1,0 +1,55 @@
+[gd_scene load_steps=8 format=3 uid="uid://dndaona4rq65t"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_wj7s5"]
+[ext_resource type="Shader" path="res://shaders/playerColor.gdshader" id="2_fevka"]
+[ext_resource type="Texture2D" uid="uid://wm5eombt02fn" path="res://textures/square.png" id="2_sp1re"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0cxm6"]
+shader = ExtResource("2_fevka")
+shader_parameter/color_base = Vector4(1, 1, 1, 1)
+shader_parameter/color_collect_mid = Vector4(1, 1, 1, 1)
+shader_parameter/color_lp = Vector4(1, 1, 1, 1)
+shader_parameter/enable_collect_lerp = false
+shader_parameter/enable_lp_lerp = false
+shader_parameter/lerp_time = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0yv1b"]
+shader = ExtResource("2_fevka")
+shader_parameter/color_base = Vector4(1, 1, 1, 1)
+shader_parameter/color_collect_mid = Vector4(1, 1, 1, 1)
+shader_parameter/color_lp = Vector4(1, 1, 1, 1)
+shader_parameter/enable_collect_lerp = false
+shader_parameter/enable_lp_lerp = false
+shader_parameter/lerp_time = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_einfv"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r8n0j"]
+size = Vector2(8, 8)
+
+[node name="player" type="CharacterBody2D"]
+collision_layer = 2
+script = ExtResource("1_wj7s5")
+
+[node name="sprite_base" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_0cxm6")
+scale = Vector2(2, 2)
+texture = ExtResource("2_sp1re")
+
+[node name="sprite_tail" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_0yv1b")
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_sp1re")
+offset = Vector2(-50, 0)
+
+[node name="collision_shape_base" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_einfv")
+debug_color = Color(0.929412, 0, 0.666667, 0)
+
+[node name="collision_shape_tail" type="CollisionShape2D" parent="."]
+position = Vector2(-25, 0)
+shape = SubResource("RectangleShape2D_r8n0j")
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[connection signal="draw" from="." to="." method="_on_draw"]
