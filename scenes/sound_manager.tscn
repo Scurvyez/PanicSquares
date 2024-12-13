@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://x4edrmo5jsf2"]
+
+[ext_resource type="Script" path="res://scripts/sound_manager.gd" id="1_4mtg1"]
+[ext_resource type="AudioStream" uid="uid://cog084d36qh6y" path="res://sounds/water-drip-45622.mp3" id="2_tnyvf"]
+[ext_resource type="AudioStream" uid="uid://cp4nnwpupexbi" path="res://sounds/quick-swhooshing-noise-80898.mp3" id="3_5v0ny"]
+
+[node name="SoundManager" type="Node"]
+script = ExtResource("1_4mtg1")
+Pickup = ExtResource("2_tnyvf")
+GhostPhysics = ExtResource("2_tnyvf")
+WallSpawn = ExtResource("3_5v0ny")

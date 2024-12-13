@@ -1,4 +1,13 @@
-extends Node # pause.gd script
+extends Node
+
+## --------------------------------/+\--------------------------------
+## pause.gd
+## 
+## This script contains the logic for when the player pauses the game.
+##
+## - Displays / hides certain ui elements on pause
+## - Halts (freezes) the current game
+## --------------------------------\+/--------------------------------
 
 @onready var ScreenManager = get_node("/root/Game/screen_manager")
 @onready var ColorUtil = get_node("/root/Game/color_util")

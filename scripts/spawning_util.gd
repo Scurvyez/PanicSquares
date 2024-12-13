@@ -1,5 +1,13 @@
 extends Node
 
+## --------------------------------/+\--------------------------------
+## spawning_util.gd
+## 
+## This script just contains some public functions used later for
+## finding suitable / valid spawn positions based on cell position and
+## current occupancy for all things in the game.
+## --------------------------------\+/--------------------------------
+
 @onready var Game = get_node("/root/Game")
 @onready var ScreenManager = get_node("/root/Game/screen_manager")
 @onready var GridManager = get_node("/root/Game/grid_manager")

@@ -1,12 +1,23 @@
-extends Node # game_manager.gd script
+extends Node
+
+## --------------------------------/+\--------------------------------
+## game_manager.gd
+## 
+## This script controls some more general game-related stuff.
+##
+## - Saving / loading
+## - Reloading the scene if the player runs out of lives (hearts)
+## - Sets initial ui values for the score, highscore, and current
+##   collectible time remaining
+## --------------------------------\+/--------------------------------
 
 @onready var ScreenManager = get_node("/root/Game/screen_manager")
+@onready var ColorUtil = get_node("/root/Game/color_util")
 @onready var CanvasGroup_MUI = get_node("/root/Game/game_manager/CanvasGroup_Main_UI")
 @onready var Lab_HS = get_node("/root/Game/game_manager/CanvasGroup_Main_UI/highscore_label")
 @onready var Lab_S = get_node("/root/Game/game_manager/CanvasGroup_Main_UI/score_label")
 @onready var Lab_T = get_node("/root/Game/game_manager/timer_label")
 
-var colorLabelText = Color8(242, 242, 242, 255)
 var savePath = "user://highscore.save" # path for save file
 var highScore = 0 # our highscore
 var currentScore = 0 # our current score
@@ -17,23 +28,7 @@ signal score_factor_of_10(currentScore)
 
 func _on_game_ready():
 	_on_load()
-	
-	# timer label setup
-	var timer_init_x = ScreenManager.ScreenSize.x / 2
-	var timer_init_y = (ScreenManager.ScreenSize.y / ScreenManager.GridSize.y) * 0.25
-	Lab_T.position = Vector2(timer_init_x / timer_init_x, timer_init_y)
-	
-	# get all labels in our canvas group for the main UI group
-	# space them out evenly within the top row of our grid
-	CanvasGroup_MUI.position.y = (ScreenManager.ScreenSize.y / ScreenManager.GridSize.y) * 0.04
-	for i in CanvasGroup_MUI.get_children():
-		i.position.y *= 1.0
-	
-	Lab_HS.set("theme_override_colors/font_color", colorLabelText)
-	Lab_S.set("theme_override_colors/font_color", colorLabelText)
-	
-	Lab_HS.text = "Highscore: " + str(highScore)
-	Lab_S.text = "Score: 0"
+	set_initial_ui()
 	emit_signal("score_updated", currentScore)
 
 
@@ -50,28 +45,65 @@ func _reload_scene():
 	get_tree().reload_current_scene()
 
 
+func set_initial_ui():
+	# timer label setup
+	var timer_init_x = ScreenManager.ScreenSize.x / 2
+	var timer_init_y = (
+		(ScreenManager.ScreenSize.y / ScreenManager.GridSize.y) * 0.25
+	)
+	Lab_T.position = Vector2(timer_init_x / timer_init_x, timer_init_y)
+	
+	# get all labels in our canvas group for the main UI group
+	# space them out evenly within the top row of our grid
+	CanvasGroup_MUI.position.y = (
+		(ScreenManager.ScreenSize.y / ScreenManager.GridSize.y) * 0.04
+	)
+	for i in CanvasGroup_MUI.get_children():
+		i.position.y *= 1.0
+	
+	Lab_HS.set("theme_override_colors/font_color", ColorUtil.Color_UI_Text)
+	Lab_S.set("theme_override_colors/font_color", ColorUtil.Color_UI_Text)
+	
+	Lab_HS.text = "Highscore: " + str(highScore)
+	Lab_S.text = "Score: 0"
+
+
 func add_point():
 	currentScore += 1
+	add_point_effect()
 	
 	Lab_S.text = "Score: " + str(currentScore)
 	emit_signal("score_updated", currentScore)
 	
 	if currentScore % 20 == 0:
 		emit_signal("score_factor_of_10", currentScore)
-		
+	
 	if currentScore <= highScore:
 		Lab_HS.text = "Highscore: " + str(highScore)
 	else:
 		highScore = currentScore
 		Lab_HS.text = "Highscore: " + str(highScore)
-		
+	
 	_on_save()
 
 
 func update_timer_label(time_left):
 	var formatted_time_left = "%*.*f"
-	Lab_T.set("theme_override_colors/font_color", colorLabelText)
+	Lab_T.set("theme_override_colors/font_color", ColorUtil.Color_UI_Text)
 	Lab_T.text = str(formatted_time_left % [3, 2, time_left])
+
+
+func add_point_effect():
+	var tween = get_tree().create_tween()
+	tween.tween_property(
+		Lab_S, "theme_override_colors/font_color", 
+		ColorUtil.Color_Co_B, 0.25
+	)
+	tween.tween_property(
+		Lab_S, "theme_override_colors/font_color", 
+		ColorUtil.Color_UI_Text, 0.25
+	)
+	emit_signal("score_updated", currentScore)
 
 
 func save_data():

@@ -1,9 +1,24 @@
-extends Node2D # game.gd script
+extends Node2D
+
+## --------------------------------/+\--------------------------------
+## game.gd
+## 
+## This script controls all the logic for.. well... our game. At the 
+## largest scope at least.
+##
+## - Creates and positions the player at startup or restart
+## - Handles health sprite setup and updates
+## - Handles spawning of all other things via the `SpawnUtil`
+##   - enemies, walls, collectibles, life pickups, powerups, etc
+## - Hooks for thing repositioning, disappearance, collection, etc
+## - Handles sound fx via the `SoundManager`
+## --------------------------------\+/--------------------------------
 
 @onready var ScreenManager = get_node("/root/Game/screen_manager")
+@onready var SoundManager = get_node("/root/Game/sound_manager")
 @onready var GameManager = get_node("/root/Game/game_manager")
 @onready var GridManager = get_node("/root/Game/grid_manager")
-@onready var Spa_Util = get_node("/root/Game/spawning_util")
+@onready var SpawnUtil = get_node("/root/Game/spawning_util")
 
 var Sce_Pl = preload("res://scenes/player.tscn")
 var Sce_Coll = preload("res://scenes/collectible.tscn")
@@ -108,7 +123,7 @@ func update_health_sprites():
 
 func spawn_collectible():
 	var inst_collec = Sce_Coll.instantiate()
-	var cell_pos = Spa_Util.get_valid_collectible_spawn_position()
+	var cell_pos = SpawnUtil.get_valid_collectible_spawn_position()
 	
 	if cell_pos == fallbackPosition:
 		return
@@ -141,7 +156,7 @@ func spawn_collectible():
 
 func spawn_wall():
 	var inst_wall = Sce_Wall.instantiate()
-	var cell_pos = Spa_Util.get_valid_wall_spawn_position()
+	var cell_pos = SpawnUtil.get_valid_wall_spawn_position()
 	
 	if cell_pos == fallbackPosition:
 		return
@@ -154,13 +169,12 @@ func spawn_wall():
 	wallPositions.append(cell_pos / ScreenManager.CellSize)
 	
 	if SoundManager.WallSpawn:
-		SoundManager.WallSpawn.pitch_scale = randf_range(0.9, 1.1)
-		SoundManager.WallSpawn.play()
+		SoundManager.play_sound(SoundManager.WallSpawn)
 
 
 func spawn_enemy():
 	var inst_enemy = Sce_Ene.instantiate()
-	var cell_pos = Spa_Util.get_valid_enemy_spawn_position()
+	var cell_pos = SpawnUtil.get_valid_enemy_spawn_position()
 	
 	if cell_pos == fallbackPosition:
 		return
@@ -177,7 +191,7 @@ func spawn_enemy():
 func spawn_life_pickup():
 	Globals.lifePickupIsActive = true
 	var inst_life_pickup = Sce_LPu.instantiate()
-	var cell_pos = Spa_Util.get_valid_life_pickup_spawn_position()
+	var cell_pos = SpawnUtil.get_valid_life_pickup_spawn_position()
 	
 	if cell_pos == fallbackPosition:
 		Globals.lifePickupIsActive = false
@@ -199,7 +213,7 @@ func spawn_life_pickup():
 func spawn_ghost_physics_powerup():
 	Globals.ghostPhysicsPowerUpIsActive = true
 	var inst_powerup = Sce_GpPu.instantiate()
-	var cell_pos = Spa_Util.get_valid_collectible_spawn_position()
+	var cell_pos = SpawnUtil.get_valid_collectible_spawn_position()
 	
 	if cell_pos == fallbackPosition:
 		Globals.ghostPhysicsPowerUpIsActive = false
@@ -239,8 +253,7 @@ func _on_player_touched_enemy():
 
 func _on_collectible_collected(collectible):
 	if SoundManager.Pickup:
-		SoundManager.Pickup.pitch_scale = randf_range(0.9, 1.1)
-		SoundManager.Pickup.play()
+		SoundManager.play_sound(SoundManager.Pickup)
 	
 	var cell_key = collectible.position / ScreenManager.CellSize
 	GridManager.mark_cell_unoccupied(cell_key)
@@ -251,8 +264,7 @@ func _on_collectible_collected(collectible):
 
 func _on_life_pickup_collected(life_pickup):
 	if SoundManager.Pickup:
-		SoundManager.Pickup.pitch_scale = randf_range(0.9, 1.1)
-		SoundManager.Pickup.play()
+		SoundManager.play_sound(SoundManager.Pickup)
 	
 	var cell_key = life_pickup.position / ScreenManager.CellSize
 	GridManager.mark_cell_unoccupied(cell_key)
@@ -266,8 +278,7 @@ func _on_life_pickup_collected(life_pickup):
 
 func _on_ghost_physics_powerup_collected(ghost_physics_powerup):
 	if SoundManager.GhostPhysics:
-		SoundManager.GhostPhysics.pitch_scale = randf_range(0.9, 1.1)
-		SoundManager.GhostPhysics.play()
+		SoundManager.play_sound(SoundManager.GhostPhysics)
 	
 	var cell_key = ghost_physics_powerup.position / ScreenManager.CellSize
 	GridManager.mark_cell_unoccupied(cell_key)
@@ -288,8 +299,7 @@ func _on_ghost_physics_powerup_collected(ghost_physics_powerup):
 
 func _wall_disappeared(wall):
 	if SoundManager.WallSpawn:
-		SoundManager.WallSpawn.pitch_scale = randf_range(0.9, 1.1)
-		SoundManager.WallSpawn.play()
+		SoundManager.play_sound(SoundManager.WallSpawn)
 	
 	var cell_key = wall.position / ScreenManager.CellSize
 	GridManager.mark_cell_unoccupied(cell_key)

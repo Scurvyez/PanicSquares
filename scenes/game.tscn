@@ -1,17 +1,16 @@
-[gd_scene load_steps=15 format=3 uid="uid://crdl5po1bcw2w"]
+[gd_scene load_steps=14 format=3 uid="uid://crdl5po1bcw2w"]
 
 [ext_resource type="PackedScene" uid="uid://dndaona4rq65t" path="res://scenes/player.tscn" id="1_2mk6v"]
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_pa8lx"]
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="2_45urb"]
 [ext_resource type="Script" path="res://scripts/screen_manager.gd" id="2_67br3"]
 [ext_resource type="Script" path="res://scripts/pause_game.gd" id="2_gqmie"]
+[ext_resource type="PackedScene" uid="uid://x4edrmo5jsf2" path="res://scenes/sound_manager.tscn" id="3_2yc24"]
 [ext_resource type="Script" path="res://scripts/unpause_game.gd" id="3_u7h42"]
 [ext_resource type="Script" path="res://scripts/grid_manager.gd" id="4_ak53a"]
 [ext_resource type="FontFile" uid="uid://dj5jtot7g6kuv" path="res://fonts/PixelOperatorSC.ttf" id="4_qo0as"]
 [ext_resource type="Script" path="res://scripts/spawning_util.gd" id="7_xqmcb"]
-[ext_resource type="AudioStream" uid="uid://cog084d36qh6y" path="res://sounds/water-drip-45622.mp3" id="8_x3jq2"]
 [ext_resource type="Script" path="res://scripts/color_util.gd" id="9_o6up7"]
-[ext_resource type="AudioStream" uid="uid://cp4nnwpupexbi" path="res://sounds/quick-swhooshing-noise-80898.mp3" id="9_u4b76"]
 [ext_resource type="Texture2D" uid="uid://cnewuhkw2xocj" path="res://textures/controls_ui_keys_base.png" id="11_p4mcu"]
 [ext_resource type="Texture2D" uid="uid://b74n5u67og0f3" path="res://textures/controls_ui_keys_overlay.png" id="12_r2tiy"]
 
@@ -21,6 +20,8 @@ script = ExtResource("1_pa8lx")
 
 [node name="screen_manager" type="Node" parent="."]
 script = ExtResource("2_67br3")
+
+[node name="sound_manager" parent="." instance=ExtResource("3_2yc24")]
 
 [node name="pause_game" type="Node" parent="."]
 process_mode = 1
@@ -101,19 +102,6 @@ texture = ExtResource("11_p4mcu")
 
 [node name="keys_overlay" type="Sprite2D" parent="pause_menu/controls_ui"]
 texture = ExtResource("12_r2tiy")
-
-[node name="sfx" type="Node" parent="."]
-
-[node name="collectible_pickup" type="AudioStreamPlayer2D" parent="sfx"]
-stream = ExtResource("8_x3jq2")
-bus = &"SFX"
-
-[node name="ghost_physics_powerup" type="AudioStreamPlayer2D" parent="sfx"]
-stream = ExtResource("8_x3jq2")
-
-[node name="wall_spawn" type="AudioStreamPlayer2D" parent="sfx"]
-stream = ExtResource("9_u4b76")
-bus = &"SFX"
 
 [connection signal="ready" from="." to="game_manager" method="_on_game_ready"]
 [connection signal="ready" from="game_manager" to="game_manager" method="_on_ready"]

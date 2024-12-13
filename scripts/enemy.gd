@@ -1,4 +1,15 @@
-extends CharacterBody2D # enemy.gd script
+extends CharacterBody2D
+
+## --------------------------------/+\--------------------------------
+## enemy.gd
+## 
+## This script controls all the logic for enemies. Touch one and lose
+## a life. Enemies have random lifetimes and patrol the areas they
+## spawn in. Get too close and they will follow you.
+## 
+## - Can wrap around the entire screen, just like the player
+## - Will pull a 180 degree turn if it hits a wall
+## --------------------------------\+/--------------------------------
 
 @onready var ScreenManager = get_node("/root/Game/screen_manager")
 @onready var Player = get_node("/root/Game/player")

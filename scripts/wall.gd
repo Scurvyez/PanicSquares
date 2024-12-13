@@ -1,7 +1,23 @@
-extends StaticBody2D # wall.gd script
+extends StaticBody2D
+
+## --------------------------------/+\--------------------------------
+## wall.gd
+## 
+## This script controls all the logic for our wall objects. Walls are 
+## not simply static things here.
+## 
+## - Has a chance to spawn in a passable state for the first half
+##   of its lifetime
+## - Has a chance to spawn in with an ocsillating scale to intoduce
+##   a new level of detail to the game
+##   - Player can just barely squeeze through at smallest scale
+## - Displays the remaining time on the wall instance
+## - May implement logic in the future to slow player down if they
+##   touch a wall... or other fun effects
+## --------------------------------\+/--------------------------------
 
 @onready var ScreenManager = get_node("/root/Game/screen_manager")
-@onready var Col_Util = get_node("/root/Game/color_util")
+@onready var ColorUtil = get_node("/root/Game/color_util")
 @onready var Spr_B = get_node("sprite_base")
 @onready var Coll_SB = get_node("collision_shape_base")
 @onready var Lab_TL = get_node("DEBUG_time_left_label")
@@ -50,10 +66,10 @@ func _process(delta):
 		update_passable_state()
 	elif Globals.playerIsGhost:
 		Coll_SB.disabled = true
-		Spr_B.material.set_shader_parameter("color_base", Col_Util.Color_Wa_P)
+		Spr_B.material.set_shader_parameter("color_base", ColorUtil.Color_Wa_P)
 	elif not passable and not Globals.playerIsGhost:
 		Coll_SB.disabled = false
-		Spr_B.material.set_shader_parameter("color_base", Col_Util.Color_Wa_B)
+		Spr_B.material.set_shader_parameter("color_base", ColorUtil.Color_Wa_B)
 	
 	if timer.time_left > 0:
 		emit_signal("timer_updated", timer.time_left)
@@ -81,7 +97,7 @@ func _physics_process(_delta):
 
 
 func set_initial_shader_params():
-	Spr_B.material.set_shader_parameter("color_base", Col_Util.Color_Wa_B)
+	Spr_B.material.set_shader_parameter("color_base", ColorUtil.Color_Wa_B)
 
 
 func ensure_unique_shader_material():
@@ -106,11 +122,11 @@ func update_passable_state():
 			or Globals.playerIsGhost
 	):
 		Coll_SB.disabled = true
-		Spr_B.material.set_shader_parameter("color_base", Col_Util.Color_Wa_P)
+		Spr_B.material.set_shader_parameter("color_base", ColorUtil.Color_Wa_P)
 		Lab_TL.modulate = colorTimeLeftPassableLable
 	else:
 		Coll_SB.disabled = false
-		Spr_B.material.set_shader_parameter("color_base", Col_Util.Color_Wa_B)
+		Spr_B.material.set_shader_parameter("color_base", ColorUtil.Color_Wa_B)
 		Lab_TL.modulate = colorTimeLeftLabel
 
 

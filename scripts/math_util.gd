@@ -1,5 +1,12 @@
 extends Node
 
+## --------------------------------/+\--------------------------------
+## math_util.gd
+## 
+## This script simply contains a couple (for now) math functins used 
+## for smoother and more lively animations.
+## --------------------------------\+/--------------------------------
+
 func easeInOutSine(t):
 	return -(cos(PI * t) - 1.0) / 2.0;
 

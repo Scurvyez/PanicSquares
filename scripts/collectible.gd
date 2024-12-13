@@ -1,4 +1,15 @@
-extends Area2D # collectible.gd script
+extends Area2D
+
+## --------------------------------/+\--------------------------------
+## collectible.gd
+## 
+## This script controls all the logic for our little collectible 
+## squares which the player collects to keep the game going. Fail to 
+## collect one before its timer runs out and lose a life (heart). Fail
+## enough times and deplete all hearts and game over.
+##
+## - Can sometimes spawn with a 50% boost in lifetime
+## --------------------------------\+/--------------------------------
 
 @onready var Game = get_node("/root/Game")
 @onready var GameManager = get_node("/root/Game/game_manager")

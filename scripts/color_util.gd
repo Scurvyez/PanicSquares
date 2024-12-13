@@ -1,5 +1,11 @@
 extends Node
 
+## --------------------------------/+\--------------------------------
+## color_util.gd
+## 
+## All of the colors our game uses in various places. More to come...
+## --------------------------------\+/--------------------------------
+
 @export_group("Game Colors")
 @export var Color_Hidden = Color(0.0, 0.0, 0.0, 0.0)
 @export var Color_Pl_B = Color(0.4, 1.0, 0.54902, 3.0)
@@ -11,3 +17,4 @@ extends Node
 @export var Color_Wa_B = Color(0.0, 0.0, 0.0, 1.0)
 @export var Color_Wa_P = Color(0.74901, 0.74901, 0.74901, 1.0)
 @export var Color_Heart = Color(1.0, 0.4, 0.4, 1.0)
+@export var Color_UI_Text = Color(0.94902, 0.94902, 0.94902)

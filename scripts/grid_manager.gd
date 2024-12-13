@@ -1,4 +1,15 @@
-extends Node2D # grid_manager.gd script
+extends Node2D
+
+## --------------------------------/+\--------------------------------
+## grid_manager.gd
+## 
+## This script controls everything related to our games' grid system.
+##
+## - Splits the screen into an even amount of cells
+## - Each cell acts as a spawn point for various things
+## - Draws lines to create the grid
+## - Tracks all occupied / unoccupied cells for spawning
+## --------------------------------\+/--------------------------------
 
 @onready var ScreenManager = get_node("/root/Game/screen_manager")
 
@@ -78,26 +89,53 @@ func _draw():
 			# Start from y = 1 to exclude the top row
 			for y in range(1, ScreenManager.GridSize.y):
 				var cell_pos = Vector2(x, y) * ScreenManager.CellSize
-				draw_rect(Rect2(cell_pos, ScreenManager.CellSize), col_GlP, false)
+				draw_rect(
+					Rect2(cell_pos, ScreenManager.CellSize), 
+					col_GlP, 
+					false
+				)
 		
 		# line y position on grid
-		var top_horiz_line = (ScreenManager.ScreenSize.y / ScreenManager.GridSize.y)
-		draw_line(Vector2(0, top_horiz_line), Vector2(ScreenManager.ScreenSize.x, top_horiz_line), col_up_gb, 4)
+		var top_horiz_line = (
+			ScreenManager.ScreenSize.y / ScreenManager.GridSize.y
+		)
+		draw_line(
+			Vector2(0, top_horiz_line), 
+			Vector2(ScreenManager.ScreenSize.x, top_horiz_line), 
+			col_up_gb, 
+			4
+		)
 
 		# Draw vertical center lines
 		for x in range(ScreenManager.GridSize.x):
-			var line_x = x * ScreenManager.CellSize.x + ScreenManager.CellSize.x / 2
+			var line_x = (
+				x * ScreenManager.CellSize.x + ScreenManager.CellSize.x / 2
+			)
 			# Start from the second row
-			draw_line(Vector2(line_x, ScreenManager.CellSize.y), Vector2(line_x, ScreenManager.ScreenSize.y), col_GlS, 1)
+			draw_line(
+				Vector2(line_x, ScreenManager.CellSize.y), 
+				Vector2(line_x, ScreenManager.ScreenSize.y), 
+				col_GlS, 
+				1
+			)
 
 		# Draw horizontal center lines
 		# Start from y = 1 to exclude the top row
 		for y in range(1, ScreenManager.GridSize.y):
-			var line_y = y * ScreenManager.CellSize.y + ScreenManager.CellSize.y / 2
-			draw_line(Vector2(0, line_y), Vector2(ScreenManager.ScreenSize.x, line_y), col_GlS, 1)
+			var line_y = (
+				y * ScreenManager.CellSize.y + ScreenManager.CellSize.y / 2
+			)
+			draw_line(
+				Vector2(0, line_y), 
+				Vector2(ScreenManager.ScreenSize.x, line_y), 
+				col_GlS, 
+				1
+			)
 		
 	if Globals.DEBUGGING_Active:
 		# Color cell the player is currently in
-		var cell_rect = Rect2(Globals.playerCell * ScreenManager.CellSize, ScreenManager.CellSize)
+		var cell_rect = (
+			Rect2(Globals.playerCell * ScreenManager.CellSize, ScreenManager.CellSize)
+		)
 		draw_rect(cell_rect, col_PlDc, true)
 

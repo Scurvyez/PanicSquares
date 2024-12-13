@@ -1,4 +1,14 @@
-extends Area2D  # life_pickup.gd script
+extends Area2D
+
+## --------------------------------/+\--------------------------------
+## life_pickup.gd
+## 
+## This script houses the logic for our life pickups. Grabbing one 
+## will give back a single lost life (heart).
+##
+## - Spawn randomly after a certain point threshold has been hit
+## - Limited lifetime
+## --------------------------------\+/--------------------------------
 
 @onready var Game = get_node("/root/Game")
 @onready var ColorUtil = get_node("/root/Game/color_util")

@@ -1,4 +1,13 @@
-extends Node # globals.gd script
+extends Node
+
+## --------------------------------/+\--------------------------------
+## globals.gd
+## 
+## This script houses all of our globally accessible variables for 
+## various things related to each aspect of the game.
+##
+## :D
+## --------------------------------\+/--------------------------------
 
 # DEBUGGING
 var DEBUGGING_Active = false

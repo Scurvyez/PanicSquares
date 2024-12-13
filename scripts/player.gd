@@ -1,4 +1,16 @@
-extends CharacterBody2D # player.gd script
+extends CharacterBody2D
+
+## --------------------------------/+\--------------------------------
+## player.gd
+## 
+## This script contains the logic for our player square. Look! It's a
+## you! Squario! Yeah.. that was bad. Forgive me. xD
+##
+## - Sets the player's initial position
+## - Handles player input / movement
+## - Player can wrap around the entire screen
+## - Handles shader updates via collection / collision triggers
+## --------------------------------\+/--------------------------------
 
 @onready var ScreenManager = get_node("/root/Game/screen_manager")
 @onready var ColorUtil = get_node("/root/Game/color_util")

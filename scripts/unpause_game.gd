@@ -1,4 +1,10 @@
-extends Node # unpause.gd script
+extends Node
+
+## --------------------------------/+\--------------------------------
+## unpause.gd
+## 
+## A small script. A simple script. This baby unpauses the game.
+## --------------------------------\+/--------------------------------
 
 func _input(_event):
 	if Input.is_action_just_pressed("pause"):

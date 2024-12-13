@@ -1,4 +1,12 @@
-extends Node # screen_manager.gd script
+extends Node
+
+## --------------------------------/+\--------------------------------
+## screen_manager.gd
+## 
+## Just a super small little helper script to calculate some aspects 
+## of our game sessions' window (screen). This data is used by various
+## other scripts to handle grid-based logic later on.
+## --------------------------------\+/--------------------------------
 
 # screen
 var ScreenSize # the size as a Vector2 (in pixels) of the entire playable screen

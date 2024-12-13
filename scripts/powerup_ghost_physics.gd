@@ -1,4 +1,14 @@
-extends Area2D  # powerup_ghost_physics.gd script
+extends Area2D
+
+## --------------------------------/+\--------------------------------
+## powerup_ghost_physics.gd
+## 
+## This script contains the logic for our ghost physics powerups. They
+## provide the player with a limited time ability to move through all
+## walls. Beware though, so can enemies!
+##
+## - Nothing else to it really
+## --------------------------------\+/--------------------------------
 
 @onready var ColorUtil = get_node("/root/Game/color_util")
 @onready var Spr_B = get_node("sprite_base")

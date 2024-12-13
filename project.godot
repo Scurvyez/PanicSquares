@@ -22,7 +22,6 @@ config/icon="res://textures/ProgramIcon.png"
 [autoload]
 
 Globals="*res://scripts/globals.gd"
-SoundManager="*res://scripts/sound_manager.gd"
 MathUtil="*res://scripts/math_util.gd"
 
 [filesystem]
