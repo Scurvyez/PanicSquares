@@ -1,8 +1,8 @@
 extends CharacterBody2D # enemy.gd script
 
-@onready var Globals = get_node("/root/Game/globals")
+@onready var ScreenManager = get_node("/root/Game/screen_manager")
 @onready var Player = get_node("/root/Game/player")
-@onready var Col_Util = get_node("/root/Game/color_util")
+@onready var ColorUtil = get_node("/root/Game/color_util")
 @onready var Spr_B = get_node("sprite_base")
 @onready var Spr_T = get_node("sprite_tail")
 @onready var Area = get_node("area")
@@ -17,11 +17,12 @@ var turn_speed = 5.0 # turn rate
 
 signal player_touched_enemy
 
+
 func _ready():
 	randomize()
 	Area.connect("body_entered", Callable(self, "_on_body_entered"))
 	Globals.enemyCell = (
-		((position - Globals.cellSize / 2) / Globals.cellSize).round()
+		((position - ScreenManager.CellSize / 2) / ScreenManager.CellSize).round()
 	)
 	Sh_C.shape.radius = Globals.enemyDetectRadius
 	
@@ -51,7 +52,7 @@ func _process(delta):
 	# Update current enemy cell positions
 	# make an array if we have > 1
 	Globals.enemyCell = (
-		((position - Globals.cellSize / 2) / Globals.cellSize).round()
+		((position - ScreenManager.CellSize / 2) / ScreenManager.CellSize).round()
 	)
 
 
@@ -88,9 +89,9 @@ func random_move(delta):
 
 
 func screen_wrap():
-	var top_limit = Globals.screenSize.y / Globals.gridSize.y
-	position.x = wrapf(position.x, 0, Globals.screenSize.x)
-	position.y = wrapf(position.y, top_limit, Globals.screenSize.y)
+	var top_limit = ScreenManager.ScreenSize.y / ScreenManager.GridSize.y
+	position.x = wrapf(position.x, 0, ScreenManager.ScreenSize.x)
+	position.y = wrapf(position.y, top_limit, ScreenManager.ScreenSize.y)
 
 
 func collision_detected() -> bool:
@@ -109,10 +110,10 @@ func handle_wall_collision():
 
 
 func set_initial_shader_params():
-	Spr_B.material.set_shader_parameter("color_base", Col_Util.Color_En_B)
-	Spr_T.material.set_shader_parameter("color_base", Col_Util.Color_En_B)
-	Spr_B.material.set_shader_parameter("color_oscil", Col_Util.Color_En_Os)
-	Spr_T.material.set_shader_parameter("color_oscil", Col_Util.Color_En_Os)
+	Spr_B.material.set_shader_parameter("color_base", ColorUtil.Color_En_B)
+	Spr_T.material.set_shader_parameter("color_base", ColorUtil.Color_En_B)
+	Spr_B.material.set_shader_parameter("color_oscil", ColorUtil.Color_En_Os)
+	Spr_T.material.set_shader_parameter("color_oscil", ColorUtil.Color_En_Os)
 
 
 func set_timer():
@@ -128,9 +129,6 @@ func _on_body_entered(body):
 	if body.name == "player":
 		emit_signal("player_touched_enemy")
 		queue_free()
-
-
-
 
 
 func _on_lifetime_expired():

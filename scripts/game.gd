@@ -1,12 +1,9 @@
 extends Node2D # game.gd script
 
-@onready var Globals = get_node("/root/Game/globals")
-@onready var G_M = get_node("/root/Game/game_manager")
-@onready var Gr_M = get_node("/root/Game/grid_manager")
+@onready var ScreenManager = get_node("/root/Game/screen_manager")
+@onready var GameManager = get_node("/root/Game/game_manager")
+@onready var GridManager = get_node("/root/Game/grid_manager")
 @onready var Spa_Util = get_node("/root/Game/spawning_util")
-@onready var Sfx_CPU = get_node("/root/Game/sfx/collectible_pickup")
-@onready var Sfx_GPPU = get_node("/root/Game/sfx/ghost_physics_powerup")
-@onready var Sfx_WS = get_node("/root/Game/sfx/wall_spawn")
 
 var Sce_Pl = preload("res://scenes/player.tscn")
 var Sce_Coll = preload("res://scenes/collectible.tscn")
@@ -30,26 +27,27 @@ var colorHeartSpriteBase = Color8(255, 102, 102, 255) # base color
 var heartSprites = [] # array to keep track of heart sprites
 var numMaxHearts # number of heart sprites to have (max)
 
-var heartOscillationSpeed = 2.0
+var heartOscillationSpeed = 1.0
 var heartOscillationAmplitude = 10.0
 var heartAnimationTimeElapsed = 0.0
+
 
 func _ready():
 	# Instantiate and position the player
 	var inst_player = Sce_Pl.instantiate()
-	inst_player.position = Globals.screenSize / 2
+	inst_player.position = ScreenManager.ScreenSize / 2
 	add_child(inst_player)
 	
 	numMaxHearts = Globals.playerHearts
 	update_health_sprites()
 	
-	if Gr_M != null:
-		numAvailCellsForSpawning = Gr_M.allcells_uo
+	if GridManager != null:
+		numAvailCellsForSpawning = GridManager.allcells_uo
 		numMaxWallsAllowed = (
-			(numAvailCellsForSpawning.size() / 2) - Globals.gridSize.x
+			(numAvailCellsForSpawning.size() / 2) - ScreenManager.GridSize.x
 	)
 	
-	G_M.connect("score_factor_of_10", Callable(self, "_on_score_factor_of_10"))
+	GameManager.connect("score_factor_of_10", Callable(self, "_on_score_factor_of_10"))
 	
 	for enemy in get_tree().get_nodes_in_group("enemies"):
 		enemy.connect(
@@ -68,24 +66,20 @@ func _ready():
 			"ghost_physics_powerup_collected", 
 			Callable(self, "_on_ghost_physics_powerup_collected")
 		)
-		
-		#ghost_physics_powerup.connect(
-			#"timeout_ghost_physics_timer", 
-			#Callable(self, "_on_timeout_ghost_physics_timer")
-		#)
 	
 	spawn_collectible()
 
 
-func _process(delta):
+func _physics_process(delta):
 	heartAnimationTimeElapsed += delta
 	
 	for i in range(heartSprites.size()):
 		var sprite = heartSprites[i]
-		var initial_y = (Globals.screenSize.y / Globals.gridSize.y) * 0.5
+		var initial_y = (ScreenManager.ScreenSize.y / ScreenManager.GridSize.y) * 0.5
+		var phase_shift = i * 0.5
 		sprite.position.y = (
-			initial_y + sin(heartAnimationTimeElapsed 
-			* heartOscillationSpeed + i) * heartOscillationAmplitude
+			initial_y + MathUtil.easeInOutSine(heartAnimationTimeElapsed 
+			* heartOscillationSpeed + phase_shift) * heartOscillationAmplitude
 		)
 
 
@@ -97,8 +91,8 @@ func update_health_sprites():
 	
 	heartSprites.clear()
 
-	var initial_x = Globals.screenSize.x - 20
-	var initial_y = (Globals.screenSize.y / Globals.gridSize.y) * 0.5
+	var initial_x = ScreenManager.ScreenSize.x - 20
+	var initial_y = (ScreenManager.ScreenSize.y / ScreenManager.GridSize.y) * 0.5
 	var pos_offset = 40
 	
 	for i in range(Globals.playerHearts):
@@ -120,7 +114,7 @@ func spawn_collectible():
 		return
 	
 	inst_collec.position = cell_pos
-	Gr_M.mark_cell_occupied(cell_pos / Globals.cellSize)
+	GridManager.mark_cell_occupied(cell_pos / ScreenManager.CellSize)
 	
 	inst_collec.connect(
 		"collectible_collected", 
@@ -142,7 +136,7 @@ func spawn_collectible():
 	
 	add_child(inst_collec)
 	collectibleInstances.append(inst_collec)
-	collectiblePositions.append(cell_pos / Globals.cellSize)
+	collectiblePositions.append(cell_pos / ScreenManager.CellSize)
 
 
 func spawn_wall():
@@ -153,14 +147,15 @@ func spawn_wall():
 		return
 	
 	inst_wall.position = cell_pos
-	Gr_M.mark_cell_occupied(cell_pos / Globals.cellSize)
+	GridManager.mark_cell_occupied(cell_pos / ScreenManager.CellSize)
 	inst_wall.connect("wall_disappeared", Callable(self, "_wall_disappeared"))
 	add_child(inst_wall)
 	wallInstances.append(inst_wall)
-	wallPositions.append(cell_pos / Globals.cellSize)
+	wallPositions.append(cell_pos / ScreenManager.CellSize)
 	
-	Sfx_WS.pitch_scale = randf_range(0.8, 1.2)
-	Sfx_WS.play()
+	if SoundManager.WallSpawn:
+		SoundManager.WallSpawn.pitch_scale = randf_range(0.9, 1.1)
+		SoundManager.WallSpawn.play()
 
 
 func spawn_enemy():
@@ -189,7 +184,7 @@ func spawn_life_pickup():
 		return
 	
 	inst_life_pickup.position = cell_pos
-	Gr_M.mark_cell_occupied(cell_pos / Globals.cellSize)
+	GridManager.mark_cell_occupied(cell_pos / ScreenManager.CellSize)
 	inst_life_pickup.add_to_group("life_pickups")
 	inst_life_pickup.connect(
 		"life_pickup_collected", 
@@ -198,7 +193,7 @@ func spawn_life_pickup():
 	
 	add_child(inst_life_pickup)
 	collectibleInstances.append(inst_life_pickup)
-	collectiblePositions.append(cell_pos / Globals.cellSize)
+	collectiblePositions.append(cell_pos / ScreenManager.CellSize)
 
 
 func spawn_ghost_physics_powerup():
@@ -222,7 +217,7 @@ func spawn_ghost_physics_powerup():
 	#)
 	add_child(inst_powerup)
 	ghostPhysicsPowerUpInstances.append(inst_powerup)
-	ghostPhysicsPowerUpPositions.append(cell_pos / Globals.cellSize)
+	ghostPhysicsPowerUpPositions.append(cell_pos / ScreenManager.CellSize)
 
 
 func _on_spawn_enemy():
@@ -243,20 +238,24 @@ func _on_player_touched_enemy():
 
 
 func _on_collectible_collected(collectible):
-	Sfx_CPU.pitch_scale = randf_range(0.7, 1.3)
-	Sfx_CPU.play()
-	var cell_key = collectible.position / Globals.cellSize
-	Gr_M.mark_cell_unoccupied(cell_key)
+	if SoundManager.Pickup:
+		SoundManager.Pickup.pitch_scale = randf_range(0.9, 1.1)
+		SoundManager.Pickup.play()
+	
+	var cell_key = collectible.position / ScreenManager.CellSize
+	GridManager.mark_cell_unoccupied(cell_key)
 	collectibleInstances.erase(collectible)
 	collectiblePositions.erase(cell_key)
 	call_deferred("spawn_collectible")
 
 
 func _on_life_pickup_collected(life_pickup):
-	Sfx_CPU.pitch_scale = randf_range(1.3, 1.6)
-	Sfx_CPU.play()
-	var cell_key = life_pickup.position / Globals.cellSize
-	Gr_M.mark_cell_unoccupied(cell_key)
+	if SoundManager.Pickup:
+		SoundManager.Pickup.pitch_scale = randf_range(0.9, 1.1)
+		SoundManager.Pickup.play()
+	
+	var cell_key = life_pickup.position / ScreenManager.CellSize
+	GridManager.mark_cell_unoccupied(cell_key)
 	collectibleInstances.erase(life_pickup)
 	collectiblePositions.erase(cell_key)
 	
@@ -266,10 +265,12 @@ func _on_life_pickup_collected(life_pickup):
 
 
 func _on_ghost_physics_powerup_collected(ghost_physics_powerup):
-	Sfx_GPPU.pitch_scale = randf_range(1.0, 1.1)
-	Sfx_GPPU.play()
-	var cell_key = ghost_physics_powerup.position / Globals.cellSize
-	Gr_M.mark_cell_unoccupied(cell_key)
+	if SoundManager.GhostPhysics:
+		SoundManager.GhostPhysics.pitch_scale = randf_range(0.9, 1.1)
+		SoundManager.GhostPhysics.play()
+	
+	var cell_key = ghost_physics_powerup.position / ScreenManager.CellSize
+	GridManager.mark_cell_unoccupied(cell_key)
 	ghostPhysicsPowerUpInstances.erase(ghost_physics_powerup)
 	ghostPhysicsPowerUpPositions.erase(cell_key)
 	Globals.ghostPhysicsPowerUpIsActive = false
@@ -286,10 +287,12 @@ func _on_ghost_physics_powerup_collected(ghost_physics_powerup):
 
 
 func _wall_disappeared(wall):
-	Sfx_WS.pitch_scale = randf_range(0.8, 1.2)
-	Sfx_WS.play()
-	var cell_key = wall.position / Globals.cellSize
-	Gr_M.mark_cell_unoccupied(cell_key)
+	if SoundManager.WallSpawn:
+		SoundManager.WallSpawn.pitch_scale = randf_range(0.9, 1.1)
+		SoundManager.WallSpawn.play()
+	
+	var cell_key = wall.position / ScreenManager.CellSize
+	GridManager.mark_cell_unoccupied(cell_key)
 	wallInstances.erase(wall)
 	wallPositions.erase(cell_key)
 	call_deferred("spawn_wall")
@@ -301,8 +304,8 @@ func _on_score_factor_of_10(_score):
 
 
 func _on_collectible_timed_out(collectible):
-	var cell_key = collectible.position / Globals.cellSize
-	Gr_M.mark_cell_unoccupied(cell_key)
+	var cell_key = collectible.position / ScreenManager.CellSize
+	GridManager.mark_cell_unoccupied(cell_key)
 	collectibleInstances.erase(collectible)
 	collectiblePositions.erase(cell_key)
 	call_deferred("spawn_collectible")

@@ -1,6 +1,6 @@
 extends Node2D # grid_manager.gd script
 
-@onready var Globals = get_node("/root/Game/globals")
+@onready var ScreenManager = get_node("/root/Game/screen_manager")
 
 var col_up_gb = Color8(0, 0, 0, 255) # upper grid bar
 var col_GlP = Color8(0, 0, 0, 100) # main grid
@@ -10,6 +10,7 @@ var col_PlDc = Color8(255, 0, 0, 100) # player's current cell
 var allcells = [] # array of all cells in the grid
 var allcells_uo = [] # array of unoccupied cells
 var allcells_o = {} # dictionary of occupied cells
+
 
 func _ready():
 	initialize_all_cells()
@@ -22,16 +23,16 @@ func _process(_delta):
 
 func initialize_all_cells():
 	allcells.clear()
-	for x in range(Globals.gridSize.x):
-		for y in range(Globals.gridSize.y):
+	for x in range(ScreenManager.GridSize.x):
+		for y in range(ScreenManager.GridSize.y):
 			allcells.append(Vector2(x, y))
 
 
 func initialize_spawnable_cells():
 	allcells_uo.clear()
-	for x in range(Globals.gridSize.x):
+	for x in range(ScreenManager.GridSize.x):
 		# Start from y = 1 to exclude the top row
-		for y in range(1, Globals.gridSize.y):
+		for y in range(1, ScreenManager.GridSize.y):
 			allcells_uo.append(Vector2(x, y))
 
 
@@ -58,7 +59,7 @@ func get_random_cell_position():
 		print("Couldn't find an unoccupied cell.")
 		return Vector2.ZERO
 
-	var cell_pos = cell * Globals.cellSize + Globals.cellSize / 2
+	var cell_pos = cell * ScreenManager.CellSize + ScreenManager.CellSize / 2
 	return cell_pos
 
 
@@ -71,32 +72,32 @@ func mark_cell_unoccupied(cell):
 
 
 func _draw():
-	if Globals.drawGrid:
+	if ScreenManager.DrawGrid:
 		# Draw the main grid
-		for x in range(Globals.gridSize.x):
+		for x in range(ScreenManager.GridSize.x):
 			# Start from y = 1 to exclude the top row
-			for y in range(1, Globals.gridSize.y):
-				var cell_pos = Vector2(x, y) * Globals.cellSize
-				draw_rect(Rect2(cell_pos, Globals.cellSize), col_GlP, false)
+			for y in range(1, ScreenManager.GridSize.y):
+				var cell_pos = Vector2(x, y) * ScreenManager.CellSize
+				draw_rect(Rect2(cell_pos, ScreenManager.CellSize), col_GlP, false)
 		
 		# line y position on grid
-		var top_horiz_line = (Globals.screenSize.y / Globals.gridSize.y)
-		draw_line(Vector2(0, top_horiz_line), Vector2(Globals.screenSize.x, top_horiz_line), col_up_gb, 4)
+		var top_horiz_line = (ScreenManager.ScreenSize.y / ScreenManager.GridSize.y)
+		draw_line(Vector2(0, top_horiz_line), Vector2(ScreenManager.ScreenSize.x, top_horiz_line), col_up_gb, 4)
 
 		# Draw vertical center lines
-		for x in range(Globals.gridSize.x):
-			var line_x = x * Globals.cellSize.x + Globals.cellSize.x / 2
+		for x in range(ScreenManager.GridSize.x):
+			var line_x = x * ScreenManager.CellSize.x + ScreenManager.CellSize.x / 2
 			# Start from the second row
-			draw_line(Vector2(line_x, Globals.cellSize.y), Vector2(line_x, Globals.screenSize.y), col_GlS, 1)
+			draw_line(Vector2(line_x, ScreenManager.CellSize.y), Vector2(line_x, ScreenManager.ScreenSize.y), col_GlS, 1)
 
 		# Draw horizontal center lines
 		# Start from y = 1 to exclude the top row
-		for y in range(1, Globals.gridSize.y):
-			var line_y = y * Globals.cellSize.y + Globals.cellSize.y / 2
-			draw_line(Vector2(0, line_y), Vector2(Globals.screenSize.x, line_y), col_GlS, 1)
+		for y in range(1, ScreenManager.GridSize.y):
+			var line_y = y * ScreenManager.CellSize.y + ScreenManager.CellSize.y / 2
+			draw_line(Vector2(0, line_y), Vector2(ScreenManager.ScreenSize.x, line_y), col_GlS, 1)
 		
 	if Globals.DEBUGGING_Active:
 		# Color cell the player is currently in
-		var cell_rect = Rect2(Globals.playerCell * Globals.cellSize, Globals.cellSize)
+		var cell_rect = Rect2(Globals.playerCell * ScreenManager.CellSize, ScreenManager.CellSize)
 		draw_rect(cell_rect, col_PlDc, true)
 

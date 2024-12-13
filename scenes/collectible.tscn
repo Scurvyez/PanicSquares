@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://cmoguh0d5yodd"]
+[gd_scene load_steps=8 format=3 uid="uid://cmoguh0d5yodd"]
 
 [ext_resource type="Script" path="res://scripts/collectible.gd" id="1_ja8cl"]
 [ext_resource type="Shader" path="res://shaders/collectibleColor.gdshader" id="2_feleg"]
 [ext_resource type="Texture2D" uid="uid://wm5eombt02fn" path="res://textures/square.png" id="2_xsuw3"]
+[ext_resource type="Texture2D" uid="uid://b04b3q6bpv8fp" path="res://textures/squareV2.png" id="3_wlemx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jr0dq"]
 shader = ExtResource("2_feleg")
@@ -21,8 +22,8 @@ script = ExtResource("1_ja8cl")
 
 [node name="sprite_base" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_jr0dq")
-scale = Vector2(2, 2)
-texture = ExtResource("2_xsuw3")
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("3_wlemx")
 
 [node name="sprite_time_booster" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_u114w")

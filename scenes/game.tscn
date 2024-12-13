@@ -3,11 +3,11 @@
 [ext_resource type="PackedScene" uid="uid://dndaona4rq65t" path="res://scenes/player.tscn" id="1_2mk6v"]
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_pa8lx"]
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="2_45urb"]
+[ext_resource type="Script" path="res://scripts/screen_manager.gd" id="2_67br3"]
 [ext_resource type="Script" path="res://scripts/pause_game.gd" id="2_gqmie"]
 [ext_resource type="Script" path="res://scripts/unpause_game.gd" id="3_u7h42"]
 [ext_resource type="Script" path="res://scripts/grid_manager.gd" id="4_ak53a"]
 [ext_resource type="FontFile" uid="uid://dj5jtot7g6kuv" path="res://fonts/PixelOperatorSC.ttf" id="4_qo0as"]
-[ext_resource type="Script" path="res://scripts/globals.gd" id="6_kckpb"]
 [ext_resource type="Script" path="res://scripts/spawning_util.gd" id="7_xqmcb"]
 [ext_resource type="AudioStream" uid="uid://cog084d36qh6y" path="res://sounds/water-drip-45622.mp3" id="8_x3jq2"]
 [ext_resource type="Script" path="res://scripts/color_util.gd" id="9_o6up7"]
@@ -19,6 +19,9 @@
 process_mode = 1
 script = ExtResource("1_pa8lx")
 
+[node name="screen_manager" type="Node" parent="."]
+script = ExtResource("2_67br3")
+
 [node name="pause_game" type="Node" parent="."]
 process_mode = 1
 script = ExtResource("2_gqmie")
@@ -26,9 +29,6 @@ script = ExtResource("2_gqmie")
 [node name="unpause_game" type="Node" parent="."]
 process_mode = 2
 script = ExtResource("3_u7h42")
-
-[node name="globals" type="Node" parent="."]
-script = ExtResource("6_kckpb")
 
 [node name="game_manager" type="Node" parent="."]
 script = ExtResource("2_45urb")

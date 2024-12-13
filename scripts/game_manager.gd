@@ -1,7 +1,7 @@
 extends Node # game_manager.gd script
 
-@onready var Globals = get_node("/root/Game/globals")
-@onready var Cg_MUI = get_node("/root/Game/game_manager/CanvasGroup_Main_UI")
+@onready var ScreenManager = get_node("/root/Game/screen_manager")
+@onready var CanvasGroup_MUI = get_node("/root/Game/game_manager/CanvasGroup_Main_UI")
 @onready var Lab_HS = get_node("/root/Game/game_manager/CanvasGroup_Main_UI/highscore_label")
 @onready var Lab_S = get_node("/root/Game/game_manager/CanvasGroup_Main_UI/score_label")
 @onready var Lab_T = get_node("/root/Game/game_manager/timer_label")
@@ -14,18 +14,19 @@ var currentScore = 0 # our current score
 signal score_updated(currentScore)
 signal score_factor_of_10(currentScore)
 
+
 func _on_game_ready():
 	_on_load()
 	
 	# timer label setup
-	var timer_init_x = Globals.screenSize.x / 2
-	var timer_init_y = (Globals.screenSize.y / Globals.gridSize.y) * 0.25
+	var timer_init_x = ScreenManager.ScreenSize.x / 2
+	var timer_init_y = (ScreenManager.ScreenSize.y / ScreenManager.GridSize.y) * 0.25
 	Lab_T.position = Vector2(timer_init_x / timer_init_x, timer_init_y)
 	
 	# get all labels in our canvas group for the main UI group
 	# space them out evenly within the top row of our grid
-	Cg_MUI.position.y = (Globals.screenSize.y / Globals.gridSize.y) * 0.04
-	for i in Cg_MUI.get_children():
+	CanvasGroup_MUI.position.y = (ScreenManager.ScreenSize.y / ScreenManager.GridSize.y) * 0.04
+	for i in CanvasGroup_MUI.get_children():
 		i.position.y *= 1.0
 	
 	Lab_HS.set("theme_override_colors/font_color", colorLabelText)

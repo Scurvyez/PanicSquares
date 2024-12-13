@@ -1,13 +1,14 @@
 extends CharacterBody2D # player.gd script
 
-@onready var Globals = get_node("/root/Game/globals")
-@onready var Col_Util = get_node("/root/Game/color_util")
+@onready var ScreenManager = get_node("/root/Game/screen_manager")
+@onready var ColorUtil = get_node("/root/Game/color_util")
 @onready var Spr_B = get_node("sprite_base")
 @onready var Spr_T = get_node("sprite_tail")
 
+
 func _ready():
-	position = Globals.screenSize / 2
-	Globals.playerCell = ((position - Globals.cellSize / 2) / Globals.cellSize).round()
+	position = ScreenManager.ScreenSize / 2
+	Globals.playerCell = ((position - ScreenManager.CellSize / 2) / ScreenManager.CellSize).round()
 	
 	set_initial_shader_params()
 
@@ -29,8 +30,8 @@ func _physics_process(delta):
 
 func _process(_delta):
 	# Update player's current cell position
-	# "- GLOBALS.cellSize / 2" to offset the position by half in both x and y directions
-	Globals.playerCell = ((position - Globals.cellSize / 2) / Globals.cellSize).round()
+	# "- ScreenManager.CellSize / 2" to offset the position by half in both x and y directions
+	Globals.playerCell = ((position - ScreenManager.CellSize / 2) / ScreenManager.CellSize).round()
 	
 	if Globals.playerCollIsLerping:
 		collect_effect(_delta)
@@ -45,26 +46,26 @@ func _process(_delta):
 
 
 func screen_wrap():
-	var top_limit = Globals.screenSize.y / Globals.gridSize.y
-	position.x = wrapf(position.x, 0, Globals.screenSize.x)
-	position.y = wrapf(position.y, top_limit, Globals.screenSize.y)
+	var top_limit = ScreenManager.ScreenSize.y / ScreenManager.GridSize.y
+	position.x = wrapf(position.x, 0, ScreenManager.ScreenSize.x)
+	position.y = wrapf(position.y, top_limit, ScreenManager.ScreenSize.y)
 
 
 func set_initial_shader_params():
-	Spr_B.material.set_shader_parameter("color_base", Col_Util.Color_Pl_B)
-	Spr_T.material.set_shader_parameter("color_base", Col_Util.Color_Pl_B)
-	Spr_B.material.set_shader_parameter("color_collect_mid", Col_Util.Color_Co_B)
-	Spr_T.material.set_shader_parameter("color_collect_mid", Col_Util.Color_Co_B)
-	Spr_B.material.set_shader_parameter("color_lp", Col_Util.Color_Lp_B)
-	Spr_T.material.set_shader_parameter("color_lp", Col_Util.Color_Lp_B)
+	Spr_B.material.set_shader_parameter("color_base", ColorUtil.Color_Pl_B)
+	Spr_T.material.set_shader_parameter("color_base", ColorUtil.Color_Pl_B)
+	Spr_B.material.set_shader_parameter("color_collect_mid", ColorUtil.Color_Co_B)
+	Spr_T.material.set_shader_parameter("color_collect_mid", ColorUtil.Color_Co_B)
+	Spr_B.material.set_shader_parameter("color_lp", ColorUtil.Color_Lp_B)
+	Spr_T.material.set_shader_parameter("color_lp", ColorUtil.Color_Lp_B)
 
 func set_default_shader_params():
-	Spr_B.material.set_shader_parameter("color_base", Col_Util.Color_Pl_B)
-	Spr_T.material.set_shader_parameter("color_base", Col_Util.Color_Pl_B)
+	Spr_B.material.set_shader_parameter("color_base", ColorUtil.Color_Pl_B)
+	Spr_T.material.set_shader_parameter("color_base", ColorUtil.Color_Pl_B)
 
 func set_ghost_shader_params():
-	Spr_B.material.set_shader_parameter("color_base", Col_Util.Color_Pl_Gp)
-	Spr_T.material.set_shader_parameter("color_base", Col_Util.Color_Pl_Gp)
+	Spr_B.material.set_shader_parameter("color_base", ColorUtil.Color_Pl_Gp)
+	Spr_T.material.set_shader_parameter("color_base", ColorUtil.Color_Pl_Gp)
 
 func _on_collect_trigger():
 	Globals.playerCollIsLerping = true

@@ -1,8 +1,7 @@
 extends Area2D  # life_pickup.gd script
 
-@onready var Globals = get_node("/root/Game/globals")
 @onready var Game = get_node("/root/Game")
-@onready var Col_Util = get_node("/root/Game/color_util")
+@onready var ColorUtil = get_node("/root/Game/color_util")
 @onready var Spr_B = get_node("sprite_base")
 @onready var Coll_PB = get_node("collision_polygon_base")
 
@@ -11,6 +10,7 @@ var timer # (in seconds) counts down as time goes on
 var time_passed = 0.0 # (in seconds)
 
 signal life_pickup_collected
+
 
 func _ready():
 	connect("body_entered", Callable(self, "_on_body_entered"))
@@ -44,7 +44,7 @@ func _on_body_entered(body):
 
 
 func set_initial_shader_params():
-	Spr_B.material.set_shader_parameter("color_base", Col_Util.Color_Lp_B)
+	Spr_B.material.set_shader_parameter("color_base", ColorUtil.Color_Lp_B)
 
 
 func set_timer():

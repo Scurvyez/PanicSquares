@@ -1,9 +1,8 @@
 extends Area2D # collectible.gd script
 
-@onready var Globals = get_node("/root/Game/globals")
 @onready var Game = get_node("/root/Game")
-@onready var G_M = get_node("/root/Game/game_manager")
-@onready var Col_Util = get_node("/root/Game/color_util")
+@onready var GameManager = get_node("/root/Game/game_manager")
+@onready var ColorUtil = get_node("/root/Game/color_util")
 @onready var Spr_B = get_node("sprite_base")
 @onready var Spr_TB = get_node("sprite_time_booster")
 @onready var Coll_SB = get_node("collision_shape_base")
@@ -22,10 +21,11 @@ signal spawn_life_pickup()
 signal spawn_ghost_physics_powerup()
 signal collectible_timed_out()
 
+
 func _ready():
 	if (
 			randf() < Globals.enemySpawnChance 
-			and G_M.currentScore >= Globals.enemySpawnScoreThreshold
+			and GameManager.currentScore >= Globals.enemySpawnScoreThreshold
 	):
 		emit_signal("spawn_enemy")
 	
@@ -35,14 +35,14 @@ func _ready():
 	):
 		if (
 				randf() < Globals.heartSpawnChance 
-				and G_M.currentScore >= Globals.heartSpawnScoreThreshold
+				and GameManager.currentScore >= Globals.heartSpawnScoreThreshold
 		):
 			emit_signal("spawn_life_pickup")
 	
 	if (
 			not Globals.ghostPhysicsPowerUpIsActive 
 			and randf() < Globals.ghostPhysicsPowerupSpawnChance 
-			and G_M.currentScore >= Globals.ghostPhysicsPowerupSpawnScoreThreshold 
+			and GameManager.currentScore >= Globals.ghostPhysicsPowerupSpawnScoreThreshold 
 			and not Globals.playerIsGhost
 	):
 		emit_signal("spawn_ghost_physics_powerup")
@@ -61,7 +61,7 @@ func _process(delta):
 	
 	if timer.time_left > 0:
 		emit_signal("timer_updated", timer.time_left)
-		G_M.update_timer_label(timer.time_left)
+		GameManager.update_timer_label(timer.time_left)
 		
 		var coll_shape = Coll_SB.shape
 		if coll_shape != null:
@@ -73,11 +73,11 @@ func _process(delta):
 
 ## CHANGE FOR RELEASE, TO BE MORE FLUID
 func set_lifetime():
-	if G_M.currentScore <= 50:
+	if GameManager.currentScore <= 50:
 		lifetime = 20.0
-	elif G_M.currentScore > 50 and G_M.currentScore <= 150:
+	elif GameManager.currentScore > 50 and GameManager.currentScore <= 150:
 		lifetime = 10.0
-	elif G_M.currentScore > 150:
+	elif GameManager.currentScore > 150:
 		lifetime = 5.0
 		
 	if is_tb:
@@ -88,13 +88,13 @@ func set_lifetime():
 func set_is_timebooster():
 	if randf() < Globals.collectibleTimeBoosterChance:
 		is_tb = true
-		Spr_TB.material.set_shader_parameter("color_base", Col_Util.Color_Pl_B)
+		Spr_TB.material.set_shader_parameter("color_base", ColorUtil.Color_Pl_B)
 	else:
-		Spr_TB.material.set_shader_parameter("color_base", Col_Util.Color_Hidden)
+		Spr_TB.material.set_shader_parameter("color_base", ColorUtil.Color_Hidden)
 
 
 func set_initial_shader_params():
-	Spr_B.material.set_shader_parameter("color_base", Col_Util.Color_Co_B)
+	Spr_B.material.set_shader_parameter("color_base", ColorUtil.Color_Co_B)
 
 
 func set_alpha_via_lifetime():
@@ -128,7 +128,7 @@ func _on_body_entered(body):
 			body._on_collect_trigger()
 			
 		emit_signal("collectible_collected", self)
-		G_M.add_point()
+		GameManager.add_point()
 		queue_free()
 
 

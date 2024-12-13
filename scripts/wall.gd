@@ -1,6 +1,6 @@
 extends StaticBody2D # wall.gd script
 
-@onready var Globals = get_node("/root/Game/globals")
+@onready var ScreenManager = get_node("/root/Game/screen_manager")
 @onready var Col_Util = get_node("/root/Game/color_util")
 @onready var Spr_B = get_node("sprite_base")
 @onready var Coll_SB = get_node("collision_shape_base")
@@ -30,7 +30,7 @@ func _ready():
 	var collision_shape = Coll_SB.shape
 	if collision_shape != null:
 		var shape_size = Vector2(collision_shape.extents.x * 2, collision_shape.extents.y * 2)
-		self.scale = Globals.cellSize / shape_size
+		self.scale = ScreenManager.CellSize / shape_size
 		scaleOriginal = scale
 	else:
 		self.scale = Globals.wallFallbackScale

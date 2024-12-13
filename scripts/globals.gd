@@ -3,12 +3,6 @@ extends Node # globals.gd script
 # DEBUGGING
 var DEBUGGING_Active = false
 
-# screen
-var screenSize # the size as a Vector2 (in pixels) of the entire playable screen
-var gridSize = Vector2(12, 7) # grid size (rows, columns) for grid system 12 * 7 = base (84 cells)
-var cellSize # the size as a Vector2 (in pixels) of a single cell within our grid
-var drawGrid = true
-
 # player
 var playerMaxHearts = 5 # maximum number of hearts
 var playerHearts = 5 # player's max (starting) hearts
@@ -55,8 +49,4 @@ var wallFallbackScale = Vector2(4, 4) # fallback scale size
 var wallLerpScaleChance = 0.25 # chance for wall to oscillate scale
 var wallLerpScaleSpeed = 0.25 # Speed of the oscillation
 var wallPassableChance = 0.25 # chance for wall to be passable
-
-func _ready():
-	screenSize = get_parent().get_viewport_rect().size
-	cellSize = screenSize / gridSize
 

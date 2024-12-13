@@ -1,7 +1,6 @@
 extends Area2D  # powerup_ghost_physics.gd script
 
-@onready var Globals = get_node("/root/Game/globals")
-@onready var Col_Util = get_node("/root/Game/color_util")
+@onready var ColorUtil = get_node("/root/Game/color_util")
 @onready var Spr_B = get_node("sprite_base")
 @onready var Coll_SB = get_node("collision_shape_base")
 
@@ -10,6 +9,7 @@ var timer # our timer, counts down as time goes on
 var time_passed = 0.0 # time passed
 
 signal ghost_physics_powerup_collected
+
 
 func _ready():
 	connect("body_entered", Callable(self, "_on_body_entered"))
@@ -32,7 +32,7 @@ func _process(delta):
 
 
 func set_initial_shader_params():
-	Spr_B.material.set_shader_parameter("color_base", Col_Util.Color_Pl_Gp)
+	Spr_B.material.set_shader_parameter("color_base", ColorUtil.Color_Pl_Gp)
 
 
 func set_timer():
