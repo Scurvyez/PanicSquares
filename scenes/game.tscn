@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://crdl5po1bcw2w"]
+[gd_scene load_steps=19 format=3 uid="uid://crdl5po1bcw2w"]
 
 [ext_resource type="PackedScene" uid="uid://dndaona4rq65t" path="res://scenes/player.tscn" id="1_2mk6v"]
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_pa8lx"]
@@ -6,17 +6,35 @@
 [ext_resource type="Script" path="res://scripts/screen_manager.gd" id="2_67br3"]
 [ext_resource type="Script" path="res://scripts/pause_game.gd" id="2_gqmie"]
 [ext_resource type="PackedScene" uid="uid://x4edrmo5jsf2" path="res://scenes/sound_manager.tscn" id="3_2yc24"]
-[ext_resource type="Script" path="res://scripts/unpause_game.gd" id="3_u7h42"]
 [ext_resource type="Script" path="res://scripts/grid_manager.gd" id="4_ak53a"]
 [ext_resource type="FontFile" uid="uid://dj5jtot7g6kuv" path="res://fonts/PixelOperatorSC.ttf" id="4_qo0as"]
 [ext_resource type="Script" path="res://scripts/spawning_util.gd" id="7_xqmcb"]
 [ext_resource type="Script" path="res://scripts/color_util.gd" id="9_o6up7"]
+[ext_resource type="Texture2D" uid="uid://cfmqcj4j6t3uq" path="res://textures/tactical_timeout.png" id="11_m5574"]
 [ext_resource type="Texture2D" uid="uid://cnewuhkw2xocj" path="res://textures/controls_ui_keys_base.png" id="11_p4mcu"]
-[ext_resource type="Texture2D" uid="uid://b74n5u67og0f3" path="res://textures/controls_ui_keys_overlay.png" id="12_r2tiy"]
+[ext_resource type="Texture2D" uid="uid://bduj8sdk3i221" path="res://textures/tactical_timeout_bg.png" id="12_2yc5p"]
+[ext_resource type="Shader" path="res://shaders/pauseMenuUI.gdshader" id="12_ei751"]
+[ext_resource type="Texture2D" uid="uid://c6a8f4coxe6h5" path="res://textures/controls_ui_keys_bg.png" id="12_x0q4p"]
+
+[sub_resource type="Environment" id="Environment_cbav3"]
+glow_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eti0a"]
+shader = ExtResource("12_ei751")
+shader_parameter/color_base = Vector4(1, 1, 1, 1)
+shader_parameter/lod = 1.3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8wh6v"]
+shader = ExtResource("12_ei751")
+shader_parameter/color_base = Vector4(1, 1, 1, 1)
+shader_parameter/lod = 1.3
 
 [node name="Game" type="Node2D"]
 process_mode = 1
 script = ExtResource("1_pa8lx")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_cbav3")
 
 [node name="screen_manager" type="Node" parent="."]
 script = ExtResource("2_67br3")
@@ -24,12 +42,8 @@ script = ExtResource("2_67br3")
 [node name="sound_manager" parent="." instance=ExtResource("3_2yc24")]
 
 [node name="pause_game" type="Node" parent="."]
-process_mode = 1
+process_mode = 3
 script = ExtResource("2_gqmie")
-
-[node name="unpause_game" type="Node" parent="."]
-process_mode = 2
-script = ExtResource("3_u7h42")
 
 [node name="game_manager" type="Node" parent="."]
 script = ExtResource("2_45urb")
@@ -75,33 +89,36 @@ script = ExtResource("9_o6up7")
 [node name="player" parent="." instance=ExtResource("1_2mk6v")]
 
 [node name="pause_menu" type="CanvasLayer" parent="."]
+process_mode = 3
 
-[node name="pause_label" type="Label" parent="pause_menu"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -576.0
-offset_top = -324.0
-offset_right = 576.0
-offset_bottom = 324.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("4_qo0as")
-theme_override_font_sizes/font_size = 128
-text = "Tactical 
-Timeout"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="tactical_timeout" type="Sprite2D" parent="pause_menu"]
+position = Vector2(576, 322)
+texture = ExtResource("11_m5574")
+
+[node name="tactical_timeout_bg" type="Sprite2D" parent="pause_menu"]
+modulate = Color(0, 0, 0, 0.686275)
+z_index = -1
+material = SubResource("ShaderMaterial_eti0a")
+position = Vector2(576, 323)
+texture = ExtResource("12_2yc5p")
 
 [node name="controls_ui" type="CanvasGroup" parent="pause_menu"]
 
 [node name="keys_base" type="Sprite2D" parent="pause_menu/controls_ui"]
+position = Vector2(576, 524)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("11_p4mcu")
 
 [node name="keys_overlay" type="Sprite2D" parent="pause_menu/controls_ui"]
-texture = ExtResource("12_r2tiy")
+position = Vector2(576, 524)
+
+[node name="keys_base_bg" type="Sprite2D" parent="pause_menu/controls_ui"]
+modulate = Color(0, 0, 0, 0.686275)
+z_index = -1
+material = SubResource("ShaderMaterial_8wh6v")
+position = Vector2(576, 524)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("12_x0q4p")
 
 [connection signal="ready" from="." to="game_manager" method="_on_game_ready"]
 [connection signal="ready" from="game_manager" to="game_manager" method="_on_ready"]

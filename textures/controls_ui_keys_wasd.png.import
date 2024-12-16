@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b74n5u67og0f3"
-path="res://.godot/imported/controls_ui_keys_overlay.png-de6d4164992561bab8ff8773982df85c.ctex"
+uid="uid://drgmi3i5dcdm7"
+path="res://.godot/imported/controls_ui_keys_wasd.png-07abd74b3c1b99a80a5c8d297b2b755c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/controls_ui_keys_overlay.png"
-dest_files=["res://.godot/imported/controls_ui_keys_overlay.png-de6d4164992561bab8ff8773982df85c.ctex"]
+source_file="res://textures/controls_ui_keys_wasd.png"
+dest_files=["res://.godot/imported/controls_ui_keys_wasd.png-07abd74b3c1b99a80a5c8d297b2b755c.ctex"]
 
 [params]
 

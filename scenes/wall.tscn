@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://crx4lvxdri5vh"]
 
 [ext_resource type="Script" path="res://scripts/wall.gd" id="1_30b8w"]
-[ext_resource type="Texture2D" uid="uid://ciw1c65k27okl" path="res://textures/squareHollow.png" id="2_w40pi"]
+[ext_resource type="Texture2D" uid="uid://c6c4keb4h65wk" path="res://textures/wallCrossErased.png" id="2_q4pqu"]
 [ext_resource type="FontFile" uid="uid://dj5jtot7g6kuv" path="res://fonts/PixelOperatorSC.ttf" id="3_4pt85"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1ip2s"]
@@ -12,7 +12,8 @@ scale = Vector2(2, 2)
 script = ExtResource("1_30b8w")
 
 [node name="sprite_base" type="Sprite2D" parent="."]
-texture = ExtResource("2_w40pi")
+scale = Vector2(0.031, 0.031)
+texture = ExtResource("2_q4pqu")
 
 [node name="collision_shape_base" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_1ip2s")

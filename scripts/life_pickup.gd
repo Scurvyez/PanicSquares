@@ -67,6 +67,6 @@ func set_timer():
 
 
 func _on_lifetime_expired():
-	Game.lifePickupIsActive = false
+	Globals.lifePickupIsActive = false
 	queue_free()
 
